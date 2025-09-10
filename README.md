@@ -34,7 +34,7 @@ mvn compile
 1. Decarga Docker Desktop
 https://www.docker.com/products/docker-desktop/
 
-2. Descargar la imagen de SonarQube en la cmd  *Windows + r*
+2. Descargamos la imagen de SonarQube en la cmd  *Windows + r*
 
 Se ejecuta el comando:
 
@@ -69,7 +69,7 @@ Se ejecuta el comando:
 ```bash
  mvn clean verify
 ```
-luego el que manda el analisis a SonarQube
+luego se manda el analisis a SonarQube
 
 ```bash
  mvn verify sonar:sonar -Dsonar.token=[TU_TOKEN_GENERADO]
@@ -143,10 +143,30 @@ Primero implemento las clases modelo para luego las pruebas y hacer la clase que
 ![alt text](docs/imagenes/clases8.png)
 ![alt text](docs/imagenes/clases9.png)
 
+🔴 Rojo:
+
+![alt text](docs/imagenes/rojo1.png)
+![alt text](docs/imagenes/rojo2.png)
+![alt text](docs/imagenes/rojo3.png)
+
 
 ---
 
 ## EPICS - FEATURES - HU
+
+
+*Features*
+
+![alt text](docs/imagenes/Tareas.png)
+
+*historias*
+
+![alt text](docs/imagenes/historias.png)
+
+*Cronograma y tablero:*
+
+![alt text](docs/imagenes/cronograma.png)
+![alt text](docs/imagenes/Tablero.png)
 
 
 ---
