@@ -143,11 +143,33 @@ Primero implemento las clases modelo para luego las pruebas y hacer la clase que
 ![alt text](docs/imagenes/clases8.png)
 ![alt text](docs/imagenes/clases9.png)
 
-🔴 Rojo:
+---
+
+# Ciclo TDD - Rojo: 🔴
 
 ![alt text](docs/imagenes/rojo1.png)
 ![alt text](docs/imagenes/rojo2.png)
 ![alt text](docs/imagenes/rojo3.png)
+
+---
+
+# Ciclo TDD - Verde: 🟢
+
+***Evidencia de codigo para que pasen ls pruebas:*** 
+
+![alt text](docs/imagenes/verde1.png)
+![alt text](docs/imagenes/verde2.png)
+![alt text](docs/imagenes/verde3.png)
+![alt text](docs/imagenes/verde4.png)
+![alt text](docs/imagenes/verde5.png)
+![alt text](docs/imagenes/verde6.png)
+![alt text](docs/imagenes/verde7.png)
+
+
+***Pruebas en verde:***
+
+![alt text](docs/imagenes/verdepuro.png)
+
 
 
 ---
