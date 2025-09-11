@@ -113,6 +113,7 @@ https://drive.google.com/file/d/1dnOOamdvMtpam0H8QHqb_9Mch4dJASzs/view?usp=shari
 - Como cliente, quiero añadir un producto con nombre, precio, stock y categoría para poder gestionar y organizar mi inventario de manera efectiva.
 - Como cliente, quiero actualizar el stock de mis productos para gestionar mejor mi inventario y evitar ventas de productos agotados.
 - Como sistema de monitoreo de stocks quiero validar los datos de un producto para poder asegurar consistencia en el stock.
+**Aunque los agentes vayan en el sistema decidi manejarlos como actores para tener mas claro su funcionamiento**
 - Como agente Advertencia quiero alertar cuando un producto tenga menos de 5 unidades para poder anticipar escasez.
 - Como agente Log quiero registrar en consola cada modificación de stock para poder auditar los cambios.
 
@@ -155,7 +156,9 @@ Primero implemento las clases modelo para luego las pruebas y hacer la clase que
 
 # Ciclo TDD - Verde: 🟢
 
-***Evidencia de codigo para que pasen ls pruebas:*** 
+***Evidencia de codigo para que pasen las pruebas:*** 
+
+- Se implemento StockService y se mejoro ManageInventory
 
 ![alt text](docs/imagenes/verde1.png)
 ![alt text](docs/imagenes/verde2.png)
@@ -170,6 +173,20 @@ Primero implemento las clases modelo para luego las pruebas y hacer la clase que
 
 ![alt text](docs/imagenes/verdepuro.png)
 
+---
+
+# Ciclo TDD - Refactor: ♻
+
+**Codigo refactorizado en MangeInventory:**
+
+![alt text](docs/imagenes/refactor1.png)
+![alt text](docs/imagenes/refactor2.png)
+![alt text](docs/imagenes/refactor3.png)
+![alt text](docs/imagenes/refactor4.png)
+
+**Codigo refactorizado en StockService:**
+
+![alt text](docs/imagenes/refactor5.png)
 
 
 ---
@@ -178,6 +195,8 @@ Primero implemento las clases modelo para luego las pruebas y hacer la clase que
 
 
 *Features*
+
+**Tareas terminadas**
 
 ![alt text](docs/imagenes/Tareas.png)
 

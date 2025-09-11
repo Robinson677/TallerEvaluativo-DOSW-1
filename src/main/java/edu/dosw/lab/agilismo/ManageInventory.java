@@ -1,6 +1,7 @@
 package edu.dosw.lab.agilismo;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ManageInventory implements Inventory{
     private final Map<String, Product> stock = new LinkedHashMap<>();
@@ -12,27 +13,22 @@ public class ManageInventory implements Inventory{
      * @return
      */
     private String normalize(String name) {
-        if (name == null) {
-            return null;
-        }
-        String trimmed = name.trim();
-        if (trimmed.isEmpty()) {
-            return null;
-        }
-        return trimmed.toLowerCase(Locale.ROOT);
+        return Optional.ofNullable(name)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(s -> s.toLowerCase(Locale.ROOT))
+                .orElse(null);
     }
 
     /**
-     * Verifica si un nombre es null o esta en blanco
-     * @param name
-     * @return
+     * Hace una copia del producto
+     * @param p representa el producto
+     * @return el producto con sus atributos
      */
-    private String trimmedName(String name) {
-        if (name == null) {
-            return null;
-        }
-        return name.trim();
+    private Product copyOfProduct(Product p) {
+        return new Product(p.getName(), p.getCategory(), p.getPrice(), p.getQuantity());
     }
+
 
     /**
      * Guarda el producto
@@ -40,57 +36,22 @@ public class ManageInventory implements Inventory{
      */
     @Override
     public void save(Product product) {
-        if (product == null) {
-            return;
-        }
+        if (product == null) {return;}
+        String key = normalize(product.getName());
+        if (key == null || product.getPrice() <= 0.0 || product.getQuantity() < 0) {return;}
 
-        String name = product.getName();
-        if (name == null) {
-            return;
-        }
-
-        String trimmed = name.trim();
-        if (trimmed.isEmpty()) {
-            return;
-        }
-
-        if (product.getPrice() <= 0.0) {
-            return;
-        }
-
-        if (product.getQuantity() < 0) {
-            return;
-        }
-
-        String key = trimmed.toLowerCase(Locale.ROOT);
-
-        if (stock.containsKey(key)) {
-            return;
-        }
-
-        Product toStore = new Product(trimmed, product.getCategory(), product.getPrice(), product.getQuantity());
-        stock.put(key, toStore);
+        stock.putIfAbsent(key,
+                new Product(product.getName().trim(), product.getCategory(),
+                        product.getPrice(), product.getQuantity()));
     }
     /**
      * Encuentra el nombre del producto
      */
     @Override
     public Product findByName(String name) {
-        if (name == null) {
-            return null;
-        }
-
-        String key = name.trim().toLowerCase(Locale.ROOT);
-        if (key.isEmpty()) {
-            return null;
-        }
-
-        Product stored = stock.get(key);
-        if (stored == null) {
-            return null;
-        }
-
-        return new Product(stored.getName(), stored.getCategory(), stored.getPrice(), stored.getQuantity());
+        String key = normalize(name);
+        return key == null ? null :
+                Optional.ofNullable(stock.get(key)).map(this::copyOfProduct).orElse(null);
     }
 
     /**
@@ -98,12 +59,11 @@ public class ManageInventory implements Inventory{
      * @return la coleccion de los productos
      */
     public Collection<Product> findAll() {
-        List<Product> copies = new ArrayList<>();
-        for (Product p : stock.values()) {
-            copies.add(new Product(p.getName(), p.getCategory(), p.getPrice(), p.getQuantity()));
-        }
-        return Collections.unmodifiableCollection(copies);
+        return stock.values().stream()
+                .map(this::copyOfProduct)
+                .collect(Collectors.toUnmodifiableList());
     }
+
     /**
      * Actualiza el producto
      * @param product
@@ -111,42 +71,42 @@ public class ManageInventory implements Inventory{
      */
     @Override
     public boolean update(Product product) {
-        if (product == null) {
-            return false;
-        }
+        if (product == null) {return false;}
+        String key = normalize(product.getName());
+        if (key == null) {return false;}
 
-        String name = product.getName();
-        if (name == null) {
-            return false;
-        }
-
-        String trimmed = name.trim();
-        if (trimmed.isEmpty()) {
-            return false;
-        }
-
-        String key = trimmed.toLowerCase(Locale.ROOT);
-        Product existing = stock.get(key);
         if (product.getQuantity() < 0) {
+            Product existing = stock.get(key);
             if (existing == null) {
-                Product toStore = new Product(trimmed, product.getCategory(), product.getPrice(), 0);
-                stock.put(key, toStore);
+                Product toStore = new Product(product.getName().trim(),
+                        product.getCategory(),
+                        Math.max(product.getPrice(), 1.0),
+                        0);
+                stock.putIfAbsent(key, toStore);
                 return true;
             } else {
                 return true;
             }
         }
 
-        if (existing == null) {
-            Product toStore = new Product(trimmed, product.getCategory(), product.getPrice(), product.getQuantity());
-            stock.put(key, toStore);
-            return true;
-        } else {
-            existing.setCategory(product.getCategory());
-            existing.setPrice(product.getPrice());
-            existing.setQuantity(product.getQuantity());
-            return true;
-        }
+        Product existing = stock.get(key);
+
+        Optional.ofNullable(existing).ifPresentOrElse(
+                ex -> {
+                    ex.setCategory(product.getCategory());
+                    ex.setPrice(product.getPrice());
+                    ex.setQuantity(product.getQuantity());
+                },
+                () -> {
+                    Product toStore = new Product(product.getName().trim(),
+                            product.getCategory(),
+                            product.getPrice(),
+                            product.getQuantity());
+                    stock.put(key, toStore);
+                }
+        );
+
+        return true;
     }
 
 
@@ -155,13 +115,7 @@ public class ManageInventory implements Inventory{
      */
     @Override
     public boolean existsByName(String name) {
-        if (name == null) {
-            return false;
-        }
-        String key = name.trim().toLowerCase(Locale.ROOT);
-        if (key.isEmpty()) {
-            return false;
-        }
-        return stock.containsKey(key);
+        String key = normalize(name);
+        return key != null && stock.containsKey(key);
     }
 }

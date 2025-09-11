@@ -35,7 +35,7 @@ public class StockService {
             throw new IllegalArgumentException("La cantidad no debe ser negativa");
         }
 
-        Product p = new Product(name, category, price, quantity);
+        Product p = new Product(name.trim(), category, price, quantity);
         inventory.save(p);
         notifyObservers(p);
         return p;
@@ -48,21 +48,13 @@ public class StockService {
      * @return true si exitia y actualizo si no es false
      */
     public boolean updateStock(String name, int newQuantity) {
-        if (name == null || name.isBlank()) {
-            return false;
-        }
-        if (newQuantity < 0) {
-            return false;
-        }
+        if (name == null || name.isBlank() || newQuantity < 0) {return false;}
 
         Product existing = inventory.findByName(name);
-        if (existing == null) {
-            return false;
-        }
+        if (existing == null) {return false;}
 
         existing.setQuantity(newQuantity);
         inventory.update(existing);
-
         notifyObservers(existing);
         return true;
     }
@@ -73,12 +65,12 @@ public class StockService {
      * @param product
      */
     private void notifyObservers(Product product) {
-        for (StockObserver obs : observers) {
+        observers.forEach(obs -> {
             try {
                 obs.onStockChanged(product);
             } catch (Exception ex) {
                 System.err.println("Observer failed: " + ex.getMessage());
             }
-        }
+        });
     }
 }
