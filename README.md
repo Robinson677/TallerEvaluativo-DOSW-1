@@ -188,6 +188,98 @@ Primero implemento las clases modelo para luego las pruebas y hacer la clase que
 
 ![alt text](docs/imagenes/refactor5.png)
 
+---
+
+## **Principios SOLID**
+
+***Single Responsibility Principle:***
+
+Hicimos que el codigo para que cada clase se encargara de su respectiva tarea
+
+- Product: solo representa los datos de un producto
+
+- ManageInventory: gestiona la persistencia en memoria del inventario
+
+- StockService: Permite a los usarios añadir, actualizar y notifica a los agentes
+
+- LogAgent y WarningAgent: se encargan unicamente de reaccionar a cambios de stock
+
+- ExecutableStockMonitoringSystem: solo coordina la interacción con el usuario
+
+***Open/Closed Principle:***
+
+- Si se quiere agregar un nuevo tipo de agente, solo creamos otra clase que implemente StockObserver
+
+- No necesitamos modificar StockService, porque este trabaja con la abstracción StockObserver
+
+***Interface Segregation Principle:***
+Las interfaces implementadas pequeñas y especificas ya que Inventory define solo las operaciones de inventario y 
+StockObserver define únicamente cómo reaccionar ante cambios de stock
+
+***Dependency Inversion:***
+
+- StockService depende de Inventory mas no de ManageInventory
+
+- StockService depende de StockObserver mas no de LogAgent o WarningAgent{
+
+---
+
+## **Patrones de Diseño:**
+
+***Observer:***
+
+StockService notifica a los agentes LogAgent y WarningAgent cada vez que se modifica el stock y estos
+agentes estan pendientes y inmediatamente notificar de forma independiente
+
+***Repository:***
+
+ManageInventory actúa como un repositorio en memoria para los productos ya que
+encapsula la lógica de acceso a datos y evita que StockService tenga que preocuparse por como se guardan los productos
+
+---
+
+# **Inyección de dependencias:** 🔌
+
+Con Spring Boot inyectamos las dependencias desde afuera, para desacoplar las clases y
+que dependan de abstracciones y no de implementaciones concretas
+
+## - @Repository: En ManageInventory  ya que es el que guarda, actualiza y consulta productos
+
+![alt text](docs/imagenes/repository.png)
+
+---
+
+## - @SpringBootApplication: En Application marca, activa y configura el Spreen y hace que este registre todos los componentes, repocitorios, etc...
+
+![alt text](docs/imagenes/aplicacionSpreen.png)
+
+---
+
+## - @Component: 
+
+#### En ExecutableStockMonitoringSystem  marca la clase como un bean generico y aqui es donde se interactua con el usuario
+
+![alt text](docs/imagenes/ejecutar1.png)
+![alt text](docs/imagenes/ejecutar2.png)
+![alt text](docs/imagenes/ejecutar3.png)
+![alt text](docs/imagenes/ejecutar4.png)
+![alt text](docs/imagenes/ejecutar5.png)
+![alt text](docs/imagenes/ejecutar6.png)
+
+---
+
+#### Los Agentes se registran en el contenedor de Spring como beans disponibles para la inyección de dependencias.
+
+![alt text](docs/imagenes/agent1.png)
+![alt text](docs/imagenes/agent2.png)
+
+
+
+---
+
+## - @Service: Lo usamos en StockService para que actue como sevicio de negocio para los clientes
+
+![alt text](docs/imagenes/servicer.png)
 
 ---
 
@@ -196,9 +288,23 @@ Primero implemento las clases modelo para luego las pruebas y hacer la clase que
 
 *Features*
 
-**Tareas terminadas**
+**Estructura Proyecto y diagramas UML**
 
 ![alt text](docs/imagenes/Tareas.png)
+
+---
+
+**Ciclo TDD**
+
+![alt text](docs/imagenes/ciclo_tdd.png)
+
+---
+
+**Inyeccion de dependencias**
+
+![alt text](docs/imagenes/inyeccion.png)
+
+
 
 *historias*
 

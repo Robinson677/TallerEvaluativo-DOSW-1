@@ -1,8 +1,12 @@
 package edu.dosw.lab.agilismo;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Objects;
 
+
+@Service
 /**
  * Clase encargada de la gestion de los productos  y se asegura que la pagina funcione bien
  */

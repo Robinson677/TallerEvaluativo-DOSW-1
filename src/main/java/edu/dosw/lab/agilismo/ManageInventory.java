@@ -1,10 +1,14 @@
 package edu.dosw.lab.agilismo;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Repository
 public class ManageInventory implements Inventory{
     private final Map<String, Product> stock = new LinkedHashMap<>();
+    private final Map<String, Integer> capacities = new HashMap<>();
 
 
     /**
@@ -75,38 +79,44 @@ public class ManageInventory implements Inventory{
         String key = normalize(product.getName());
         if (key == null) {return false;}
 
+        Product existing = stock.get(key);
         if (product.getQuantity() < 0) {
-            Product existing = stock.get(key);
+
             if (existing == null) {
                 Product toStore = new Product(product.getName().trim(),
                         product.getCategory(),
                         Math.max(product.getPrice(), 1.0),
                         0);
                 stock.putIfAbsent(key, toStore);
+                capacities.putIfAbsent(key, 0);
                 return true;
             } else {
                 return true;
             }
         }
 
-        Product existing = stock.get(key);
+        if (existing == null) {
+            Product toStore = new Product(product.getName().trim(),
+                    product.getCategory(),
+                    product.getPrice(),
+                    product.getQuantity());
+            stock.put(key, toStore);
+            capacities.put(key, product.getQuantity());
+            return true;
+        }
 
-        Optional.ofNullable(existing).ifPresentOrElse(
-                ex -> {
-                    ex.setCategory(product.getCategory());
-                    ex.setPrice(product.getPrice());
-                    ex.setQuantity(product.getQuantity());
-                },
-                () -> {
-                    Product toStore = new Product(product.getName().trim(),
-                            product.getCategory(),
-                            product.getPrice(),
-                            product.getQuantity());
-                    stock.put(key, toStore);
-                }
-        );
 
+        existing.setCategory(product.getCategory());
+        existing.setPrice(product.getPrice());
+
+        Integer cap = capacities.get(key);
+        int newQuantity = product.getQuantity();
+        if (cap != null && cap >= 0 && newQuantity > cap) {
+            newQuantity = cap;
+        }
+        existing.setQuantity(newQuantity);
         return true;
+
     }
 
 
@@ -117,5 +127,22 @@ public class ManageInventory implements Inventory{
     public boolean existsByName(String name) {
         String key = normalize(name);
         return key != null && stock.containsKey(key);
+    }
+
+    @Override
+    public Integer getCapacity(String name) {
+        String key = normalize(name);
+        return key == null ? null : capacities.get(key);
+    }
+
+    @Override
+    public void setCapacity(String name, int capacity) {
+        String key = normalize(name);
+        if (key == null) return;
+        capacities.put(key, Math.max(0, capacity));
+        Product existing = stock.get(key);
+        if (existing != null && existing.getQuantity() > capacity) {
+            existing.setQuantity(capacity);
+        }
     }
 }

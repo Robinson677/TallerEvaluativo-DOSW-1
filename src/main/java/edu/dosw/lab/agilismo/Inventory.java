@@ -31,4 +31,15 @@ public interface Inventory {
      * devuelve true si existe un producto con ese nombre
      */
     boolean existsByName(String name);
+
+    /**
+     * Devuelve la cantidad maxima de un producto
+     */
+    Integer getCapacity(String name);
+
+    /**
+     * Establece la capacidad maxima de un producto
+     */
+    void setCapacity(String name, int capacity);
+
 }
