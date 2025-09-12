@@ -283,6 +283,65 @@ que dependan de abstracciones y no de implementaciones concretas
 
 ---
 
+## SONARQUBE y JaCoCo ✅
+
+Como ya hicimos la configuración de SonarQibe y Jacoco al inicio entonces
+continuamos con la cobertura de pruebas, como las prubeas necesitan al menos un
+80% no me pasaban entonces implemente mas clases de pruebas para validarlo 
+
+- Para AgentsAndStockServiceTest:
+
+![alt text](docs/imagenes/pruebas1.png)
+
+
+- Implemente mas pruebas en InventoryValidationTest
+
+![alt text](docs/imagenes/pruebas2.png)
+
+
+- Finalmente para  StockMonitoringSystemTest
+
+![alt text](docs/imagenes/pruebas3.png)
+
+---
+
+### Verificamos con SonarQuBe
+
+### 1. Entonces podemos usar la terminal de intelloJ para escribir el comando que nos valida, ejecuta y compila las pruebas:
+
+```bash
+ mvn clean verify
+```
+
+#### Verificamos que si haya funcionado, y si como se puede objservar logramos alcanzar la cobertura 
+
+![alt text](docs/imagenes/pruebas4.png)
+![alt text](docs/imagenes/pruebas5.png)
+
+---
+
+### 2. Luego podemos usar un comando para mirar el target directemente en internet
+
+```bash
+ target/site/jacoco/index.html
+```
+
+#### Vemos que la cobertura es mayor de 80% entonces cumplimos el objetivo
+
+![alt text](docs/imagenes/cobertura1.png)
+![alt text](docs/imagenes/cobertura1.png)
+
+
+![alt text](docs/imagenes/conclusion.png)
+
+
+
+
+
+
+
+---
+
 ## EPICS - FEATURES - HU
 
 
@@ -304,7 +363,12 @@ que dependan de abstracciones y no de implementaciones concretas
 
 ![alt text](docs/imagenes/inyeccion.png)
 
+---
 
+**Prubeas SonarQube y JaCoCo**
+![alt text](docs/imagenes/prys.png)
+
+---
 
 *historias*
 
@@ -314,6 +378,7 @@ que dependan de abstracciones y no de implementaciones concretas
 
 ![alt text](docs/imagenes/cronograma.png)
 ![alt text](docs/imagenes/Tablero.png)
+
 
 
 ---
